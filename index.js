@@ -1,50 +1,90 @@
 function prtScn(result){
-    document.getElementById("result").placeholder = result;s
+    document.getElementById("result").placeholder = result;
+    return true;
+}
+
+function eraseData(){
+    localStorage[`win`] = 0;
+    localStorage[`lose`] = 0;
+    document.getElementById("victories").innerText = localStorage.getItem("win");
+    document.getElementById("defeats").innerText = localStorage.getItem("lose");
+    document.getElementById("result").placeholder = "";
+    document.getElementById("showImage1").innerHTML = ``;
+    document.getElementById("showImage2").innerHTML = ``;
+    return true;
+}
+
+function showEraseButton(){
+    document.getElementById("victories").innerText = localStorage.getItem("win");
+    document.getElementById("erase").innerHTML = `<button onclick="eraseData()" id="button" class="btn btn-lg btn-outline-dark text-uppercase font-weight-light rounded-0">Erase Data</button>`;
+    return true;
+}
+
+function player1Wins(){
+    prtScn(`You got lucky!`);
+    localStorage[`win`] = parseInt(localStorage.getItem("win"))+1;
+    showEraseButton();
+    return true;
+}
+
+function player2Wins(){
+    prtScn(`You are a loser`); 
+    localStorage[`lose`] = parseInt(localStorage.getItem("lose"))+1;
+    document.getElementById("defeats").innerText = localStorage.getItem("lose");
+    showEraseButton();
+    return true;
+}
+
+function tie(){
+    prtScn(`Oh, it's a tie`); 
+    return true;
+}
+
+function showImages(image1, image2){
+    document.getElementById("showImage1").innerHTML = `<img src="${image1}.png">`;
+    document.getElementById("showImage2").innerHTML = `<img src="${image2}.png">`;
     return true;
 }
 
 function play(player1){
     let arr = ["Rock", "Paper", "Scissors"];
-    player2 = arr[Math.floor(Math.random() * arr.length)];
+    let player2 = arr[Math.floor(Math.random() * arr.length)];
+    
+    showImages(player1, player2);
 
-    let whoWins = "";
     if (player1 == `Rock`){
         if (player2 == `Paper`){
-            whoWins = `Player 2 is the winner`;
+            player2Wins();
         }
         else if (player2 == `Scissors`){
-            whoWins = `Player 1 is the winner`;
+            player1Wins();
         }
         else{
-            whoWins = `There's a tie!`;
+            tie();
         }
     }
     else if (player1 == `Paper`){
         if (player2 == `Rock`){
-            whoWins = `Player 1 is the winner`;
+            player1Wins();
         }
         else if (player2 == `Scissors`){
-            whoWins = `Player 2 is the winner`;
+            player2Wins();
         }
         else{
-            whoWins = `There's a tie!`;
+            tie();
         }
     }
     else if (player1 == `Scissors`){
         if (player2 == `Paper`){
-            whoWins = `Player 1 is the winner`;
+            player1Wins();
         }
         else if (player2 == `Rock`){
-            whoWins = `Player 2 is the winner`;
+            player2Wins();
         }
         else{
-            whoWins = `There's a tie!`;
+            tie();
         }
     }
-    else{
-        whoWins = `Not a valid value`;
-    }
-    prtScn(whoWins);
     return true;
 }
 
@@ -67,7 +107,10 @@ function setPlayer1Scissors(){
 }
 
 function main(){
-
+    localStorage.setItem("win", 0);
+    localStorage.setItem("lose", 0);
+    document.getElementById("victories").innerText = localStorage.getItem("win");
+    document.getElementById("defeats").innerText = localStorage.getItem("lose");
 }
 
 window.onload = main();
